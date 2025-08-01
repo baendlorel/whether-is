@@ -23,7 +23,6 @@ export default [
         file: 'dist/index.js',
         format: 'cjs', // 指定为CommonJS格式
         sourcemap: true,
-        name: 'ReflectDeep', // 全局名称
       },
     ],
 
