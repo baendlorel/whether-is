@@ -149,11 +149,35 @@ export class UntypedWhether extends Function {
   }
 
   /**
-   * Tell whether the target is a Promise
+   * Tell whether the target is a Set
    * @param o target
    */
   isSet<T = any>(o: any): o is Set<T> {
-    return this.isSameProto(Set, o);
+    return this.isSameProto(Set, o) && this.isIterable(o);
+  }
+
+  /**
+   * Tell whether the target is a Map
+   * @param o target
+   */
+  isMap<K = any, V = any>(o: any): o is Map<K, V> {
+    return this.isSameProto(Map, o) && this.isIterable(o);
+  }
+
+  /**
+   * Tell whether the target is a WeakSet
+   * @param o target
+   */
+  isWeakSet<T extends WeakKey>(o: any): o is WeakSet<T> {
+    return this.isSameProto(WeakSet, o);
+  }
+
+  /**
+   * Tell whether the target is a WeakMap
+   * @param o target
+   */
+  isWeakMap<K extends WeakKey, V = any>(o: any): o is WeakMap<K, V> {
+    return this.isSameProto(WeakMap, o);
   }
 
   /**
@@ -161,7 +185,7 @@ export class UntypedWhether extends Function {
    * @param o target
    */
   isIterable(o: any): o is Iterable<any> {
-    return !!o && typeof o[Symbol.iterator] === 'function';
+    return this.isObject<any>(o) && typeof o[Symbol.iterator] === 'function';
   }
 
   /**
@@ -176,6 +200,13 @@ export class UntypedWhether extends Function {
     return proto === Object.prototype || proto === null;
   }
 
+  /**
+   * Tell whether the target is a RegExp instance
+   * @param o target
+   */
+  isRegExp(o: any): o is RegExp {
+    return this.isSameProto(RegExp, o);
+  }
   // #endregion
 
   // #region Normal judge
@@ -337,6 +368,10 @@ export class UntypedWhether extends Function {
    */
   isSafeNumber(o: any): boolean {
     return typeof o === 'number' && o <= Number.MAX_SAFE_INTEGER && o >= Number.MIN_SAFE_INTEGER;
+  }
+
+  isFinite(o: any): boolean {
+    return Number.isFinite(o);
   }
 
   /**
