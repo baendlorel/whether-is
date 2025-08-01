@@ -86,6 +86,96 @@ export class UntypedWhether extends Function {
   isPositiveZero(o: any): boolean {
     return Object.is(o, +0);
   }
+
+  private isSameProto(con: Class, o: object): boolean {
+    if (o instanceof con) {
+      return true;
+    }
+
+    if (!this.isObject(o)) {
+      return false;
+    }
+
+    let example;
+    if (con === Promise) {
+      example = new con(() => {});
+    } else {
+      example = new con();
+    }
+
+    const proto = Reflect.getPrototypeOf(example) as object;
+    const targetProto = Reflect.getPrototypeOf(o);
+    if (!targetProto) {
+      return false;
+    }
+    const keys = Reflect.ownKeys(proto);
+    const targetKeys = Reflect.ownKeys(targetProto);
+    if (keys.length !== targetKeys.length) {
+      return false;
+    }
+    const set = new Set([...keys, ...targetKeys]);
+    if (set.size !== keys.length) {
+      return false;
+    }
+
+    if (Object.prototype.toString.call(o) !== `[object ${con.name}]`) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Tell whether the target is an Error instance
+   * @param o target
+   */
+  isError(o: any): o is Error {
+    return this.isSameProto(Error, o);
+  }
+
+  /**
+   * Tell whether the target is a Date instance
+   * @param o target
+   */
+  isDate(o: any): o is Date {
+    return this.isSameProto(Date, o);
+  }
+
+  /**
+   * Tell whether the target is a Promise
+   * @param o target
+   */
+  isPromise<T = any>(o: any): o is Promise<T> {
+    return this.isSameProto(Promise, o);
+  }
+
+  /**
+   * Tell whether the target is a Promise
+   * @param o target
+   */
+  isSet<T = any>(o: any): o is Set<T> {
+    return this.isSameProto(Set, o);
+  }
+
+  /**
+   * Tell whether the target is iterable
+   * @param o target
+   */
+  isIterable(o: any): o is Iterable<any> {
+    return !!o && typeof o[Symbol.iterator] === 'function';
+  }
+
+  /**
+   * Tell whether the target is a plain object (created by {} or new Object)
+   * @param o target
+   */
+  isPlainObject(o: any): o is object {
+    if (!this.isObject(o)) {
+      return false;
+    }
+    const proto = Reflect.getPrototypeOf(o);
+    return proto === Object.prototype || proto === null;
+  }
+
   // #endregion
 
   // #region Normal judge

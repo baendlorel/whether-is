@@ -1,3 +1,3 @@
-type Class = new (...args: unknown[]) => unknown;
+type Class = new (...args: any[]) => any;
 
-type Func = (...args: unknown[]) => unknown;
+type Func = (...args: any[]) => any;
