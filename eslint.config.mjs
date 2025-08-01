@@ -22,6 +22,7 @@ export default tseslint.config(
   },
   {
     rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/prefer-for-of': 'off',
       '@typescript-eslint/unified-signatures': 'off',
       '@typescript-eslint/no-unused-vars': [

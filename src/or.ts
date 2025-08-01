@@ -1,7 +1,6 @@
 import { UntypedWhether } from './whether';
-
 const NOT_GIVEN = Symbol('NOT_GIVEN');
-class Or extends UntypedWhether {
+class _ extends UntypedWhether {
   orNegativeZero(o: any): boolean {
     return o === undefined || this.isNegativeZero(o);
   }

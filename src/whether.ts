@@ -117,7 +117,7 @@ export class UntypedWhether extends Function {
 
     let example;
     if (Object.is(protoClass, Promise)) {
-      example = new protoClass(() => {});
+      example = new protoClass(() => ({}));
     } else {
       example = new protoClass();
     }

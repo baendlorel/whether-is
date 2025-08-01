@@ -93,7 +93,7 @@ importers:
         specifier: ^5.8.3
         version: 5.9.2
       typescript-eslint:
-        specifier: ^8.35.1
+        specifier: ^8.38.0
         version: 8.38.0(eslint@9.32.0)(typescript@5.9.2)
 
 packages:

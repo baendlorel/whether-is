@@ -1,8 +1,7 @@
 import { getAllKeys } from './get-all-keys';
 
-interface Like {
-  <T extends Class>(protoClass: T, o: any): o is InstanceType<T>;
-}
+type Like = <T extends Class>(protoClass: T, o: any) => o is InstanceType<T>;
+
 /**
  * Deeply compare two values for equality.
  * Uses Object.is for primitive values.
