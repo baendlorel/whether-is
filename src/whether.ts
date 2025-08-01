@@ -132,7 +132,9 @@ export class UntypedWhether extends Function {
   }
 
   /**
-   * Tell whether the target is like an Error instance
+   * Tell whether the target is like an `Error` instance
+   * - If the target is an instanceof `Error`, returns true immediately.
+   * - Otherwise, checks if all property keys in the prototype chain have the same `typeof`.
    * @param o target
    */
   likeError(o: any): o is Error {
@@ -140,7 +142,9 @@ export class UntypedWhether extends Function {
   }
 
   /**
-   * Tell whether the target is like a Date instance
+   * Tell whether the target is like a `Date` instance
+   * - If the target is an instanceof `Date`, returns true immediately.
+   * - Otherwise, checks if all property keys in the prototype chain have the same `typeof`.
    * @param o target
    */
   likeDate(o: any): o is Date {
@@ -148,7 +152,9 @@ export class UntypedWhether extends Function {
   }
 
   /**
-   * Tell whether the target is like a Promise
+   * Tell whether the target is like a `Promise`
+   * - If the target is an instanceof `Promise`, returns true immediately.
+   * - Otherwise, checks if all property keys in the prototype chain have the same `typeof`.
    * @param o target
    */
   likePromise<T = any>(o: any): o is Promise<T> {
@@ -156,7 +162,9 @@ export class UntypedWhether extends Function {
   }
 
   /**
-   * Tell whether the target is like a Set
+   * Tell whether the target is like a `Set`
+   * - If the target is an instanceof `Set`, returns true immediately.
+   * - Otherwise, checks if all property keys in the prototype chain have the same `typeof`.
    * @param o target
    */
   likeSet<T = any>(o: any): o is Set<T> {
@@ -164,7 +172,9 @@ export class UntypedWhether extends Function {
   }
 
   /**
-   * Tell whether the target is like a Map
+   * Tell whether the target is like a `Map`
+   * - If the target is an instanceof `Map`, returns true immediately.
+   * - Otherwise, checks if all property keys in the prototype chain have the same `typeof`.
    * @param o target
    */
   likeMap<K = any, V = any>(o: any): o is Map<K, V> {
@@ -172,7 +182,10 @@ export class UntypedWhether extends Function {
   }
 
   /**
-   * Tell whether the target is like a WeakSet
+   * Tell whether the target is like a `WeakSet`
+   * - If the target is an instanceof `WeakSet`, returns true immediately.
+   * - Otherwise, checks if all property keys in the prototype chain have the same `typeof`.
+   * - `likeWeakSet(Set)` is  **true !**
    * @param o target
    */
   likeWeakSet<T extends WeakKey>(o: any): o is WeakSet<T> {
@@ -180,7 +193,10 @@ export class UntypedWhether extends Function {
   }
 
   /**
-   * Tell whether the target is like a WeakMap
+   * Tell whether the target is like a `WeakMap`
+   * - If the target is an instanceof `WeakMap`, returns true immediately.
+   * - Otherwise, checks if all property keys in the prototype chain have the same `typeof`.
+   * - `likeWeakMap(Map)` is  **true !**
    * @param o target
    */
   likeWeakMap<K extends WeakKey, V = any>(o: any): o is WeakMap<K, V> {
@@ -212,10 +228,30 @@ export class UntypedWhether extends Function {
 
   /**
    * Tell whether the target is like a RegExp instance
+   * - If the target is an instanceof RegExp, returns true immediately.
+   * - Otherwise, checks if all property keys in the prototype chain have the same typeof.
    * @param o target
    */
   likeRegExp(o: any): o is RegExp {
     return this.likeInstanceOf(RegExp, o);
+  }
+
+  /**
+   * Tell whether the target is Promise-like
+   *
+   * Checks if the target is an object or function and has a 'then' method which is a function.
+   * @param o target
+   */
+  isPromiseLike<T = any>(o: any): o is PromiseLike<T> {
+    if (!this.likeObject<{ then: Func }>(o)) {
+      return false;
+    }
+
+    if (o instanceof Promise) {
+      return true;
+    }
+
+    return typeof o.then === 'function';
   }
   // #endregion
 
@@ -233,7 +269,7 @@ export class UntypedWhether extends Function {
    * Tell whether the target is a non-null object or a function
    * @param o target
    */
-  likeObject(o: unknown) {
+  likeObject<T extends object | Func>(o: unknown): o is T {
     return (typeof o === 'object' && o !== null) || typeof o === 'function';
   }
 

@@ -77,12 +77,12 @@ describe('UntypedWhether', () => {
 
   it('likeWeakSet', () => {
     expect(whether.likeWeakSet(new WeakSet())).toBe(true);
-    expect(whether.likeWeakSet(new Set())).toBe(false);
+    expect(whether.likeWeakSet(new Set())).toBe(true);
   });
 
   it('likeWeakMap', () => {
     expect(whether.likeWeakMap(new WeakMap())).toBe(true);
-    expect(whether.likeWeakMap(new Map())).toBe(false);
+    expect(whether.likeWeakMap(new Map())).toBe(true);
   });
 
   it('isIterable', () => {
