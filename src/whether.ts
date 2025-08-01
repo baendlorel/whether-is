@@ -185,7 +185,10 @@ export class UntypedWhether extends Function {
    * @param o target
    */
   isIterable(o: any): o is Iterable<any> {
-    return this.isObject<any>(o) && typeof o[Symbol.iterator] === 'function';
+    if (o === null || o === undefined) {
+      return false;
+    }
+    return typeof o[Symbol.iterator] === 'function';
   }
 
   /**
@@ -376,6 +379,10 @@ export class UntypedWhether extends Function {
 
   /**
    * Tell whether the target is a class constructor
+   * - use proxy to check if the target is constructable
+   * - then see if `target.toString()` starts with `class` or `[class`(sometimes in node)
+   * - cannot tell after `.bind()` or Proxied the apply behavior of a class
+   * @see For precise results, see https://github.com/baendlorel/get-function-features
    * @param o target
    */
   isClass(o: any): o is Class {
@@ -385,7 +392,9 @@ export class UntypedWhether extends Function {
     try {
       const psudo = new Proxy(o, { construct: () => ({}) });
       new psudo();
-      return true;
+      const str = Function.prototype.toString.call(o) as string;
+      const trimmed = str.replace(/\s/g, '');
+      return trimmed.startsWith('class') || trimmed.startsWith('[class');
     } catch {
       return false;
     }
@@ -430,18 +439,11 @@ export class UntypedWhether extends Function {
    * Tell whether the target is like `(...) => any`
    * - Might be not so accurate under some extreme circumstances like bound functions or proxied functions, etc.
    *   - So we just don't allow such cases.
-   * @see https://github.com/baendlorel/get-function-features
-   * @see https://github.com/baendlorel/js-is-arrow-function
+   * @see For precise results, see https://github.com/baendlorel/get-function-features
    */
   isArrowFunction(o: any): o is Func {
     if (typeof o !== 'function') {
       return false;
-    }
-
-    const str = Function.prototype.toString.call(o) as string;
-    const trimmed = str.replace(/\s/g, '');
-    if (/^/.test(trimmed)) {
-      return true;
     }
 
     try {
