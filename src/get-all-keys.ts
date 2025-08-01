@@ -1,5 +1,5 @@
 export function getAllKeys(o: any) {
-  let p = Reflect.getPrototypeOf(o);
+  let p = o;
   const keys = new Set<string | symbol>();
   while (p !== null) {
     Reflect.ownKeys(p).forEach((k) => keys.add(k));

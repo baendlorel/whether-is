@@ -1,3 +1,4 @@
+import { deepEqual } from './deep-equal';
 import { getAllKeys } from './get-all-keys';
 
 const NOT_GIVEN = Symbol('NOT_GIVEN');
@@ -13,6 +14,15 @@ export class UntypedWhether extends Function {
    */
   is(a: any, b: any): boolean {
     return Object.is(a, b);
+  }
+
+  /**
+   * Deepl equal
+   * @param a
+   * @param b
+   */
+  equal(a: any, b: any): boolean {
+    return deepEqual(a, b, this.likeInstanceOf.bind(this));
   }
 
   /**
@@ -96,7 +106,7 @@ export class UntypedWhether extends Function {
    * @param o
    * @returns
    */
-  likeInstanceOf(protoClass: Class, o: any): boolean {
+  likeInstanceOf<T extends Class>(protoClass: T, o: any): o is InstanceType<T> {
     if (o instanceof protoClass) {
       return true;
     }
@@ -106,7 +116,7 @@ export class UntypedWhether extends Function {
     }
 
     let example;
-    if (protoClass === Promise) {
+    if (Object.is(protoClass, Promise)) {
       example = new protoClass(() => {});
     } else {
       example = new protoClass();

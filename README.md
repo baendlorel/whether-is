@@ -20,8 +20,7 @@ npm install whether-is
 ## Usage
 
 ```ts
-import { UntypedWhether } from 'whether-is';
-const whether = new UntypedWhether();
+import { whether } from 'whether-is';
 
 whether.isString('abc'); // true
 whether.isNumber(123); // true
@@ -33,6 +32,7 @@ whether.likePromise(Promise.resolve()); // true
 
 ## API Highlights
 
+- `is`, `equal`(deep)
 - `isString`, `isNumber`, `isBoolean`, `isNull`, `isUndefined`, `isSymbol`, `isBigInt`
 - `isObject`, `likeObject`, `isArray`, `isFunction`, `isClass`, `isArrowFunction`
 - `isEmpty`, `isEmptyObject`, `isEmptyArray`, `isNaN`, `isInteger`, `isSafeInteger`, `isSafeNumber`, `isFinite`, `isPrimitive`, `isField`, `isPropertyKey`
@@ -87,8 +87,7 @@ npm install whether-is
 ## 用法示例
 
 ```ts
-import { UntypedWhether } from 'whether-is';
-const whether = new UntypedWhether();
+import { whether } from 'whether-is';
 
 whether.isString('abc'); // true
 whether.isNumber(123); // true
@@ -100,6 +99,7 @@ whether.likePromise(Promise.resolve()); // true
 
 ## 主要 API
 
+- `is`, `equal`(deep)
 - `isString`, `isNumber`, `isBoolean`, `isNull`, `isUndefined`, `isSymbol`, `isBigInt`
 - `isObject`, `likeObject`, `isArray`, `isFunction`, `isClass`, `isArrowFunction`
 - `isEmpty`, `isEmptyObject`, `isEmptyArray`, `isNaN`, `isInteger`, `isSafeInteger`, `isSafeNumber`, `isFinite`, `isPrimitive`, `isField`, `isPropertyKey`
