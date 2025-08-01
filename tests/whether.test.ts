@@ -49,40 +49,40 @@ describe('UntypedWhether', () => {
     expect(whether.isPositiveZero(-0)).toBe(false);
   });
 
-  it('isError', () => {
-    expect(whether.isError(new Error())).toBe(true);
-    expect(whether.isError(new TypeError())).toBe(true);
-    expect(whether.isError({})).toBe(false);
+  it('likeError', () => {
+    expect(whether.likeError(new Error())).toBe(true);
+    expect(whether.likeError(new TypeError())).toBe(true);
+    expect(whether.likeError({})).toBe(false);
   });
 
-  it('isDate', () => {
-    expect(whether.isDate(new Date())).toBe(true);
-    expect(whether.isDate(Date.now())).toBe(false);
+  it('likeDate', () => {
+    expect(whether.likeDate(new Date())).toBe(true);
+    expect(whether.likeDate(Date.now())).toBe(false);
   });
 
-  it('isPromise', () => {
-    expect(whether.isPromise(Promise.resolve())).toBe(true);
-    expect(whether.isPromise({ then: () => {}, catch: () => {} })).toBe(false);
+  it('likePromise', () => {
+    expect(whether.likePromise(Promise.resolve())).toBe(true);
+    expect(whether.likePromise({ then: () => {}, catch: () => {} })).toBe(false);
   });
 
-  it('isSet', () => {
-    expect(whether.isSet(new Set())).toBe(true);
-    expect(whether.isSet([])).toBe(false);
+  it('likeSet', () => {
+    expect(whether.likeSet(new Set())).toBe(true);
+    expect(whether.likeSet([])).toBe(false);
   });
 
-  it('isMap', () => {
-    expect(whether.isMap(new Map())).toBe(true);
-    expect(whether.isMap({})).toBe(false);
+  it('likeMap', () => {
+    expect(whether.likeMap(new Map())).toBe(true);
+    expect(whether.likeMap({})).toBe(false);
   });
 
-  it('isWeakSet', () => {
-    expect(whether.isWeakSet(new WeakSet())).toBe(true);
-    expect(whether.isWeakSet(new Set())).toBe(false);
+  it('likeWeakSet', () => {
+    expect(whether.likeWeakSet(new WeakSet())).toBe(true);
+    expect(whether.likeWeakSet(new Set())).toBe(false);
   });
 
-  it('isWeakMap', () => {
-    expect(whether.isWeakMap(new WeakMap())).toBe(true);
-    expect(whether.isWeakMap(new Map())).toBe(false);
+  it('likeWeakMap', () => {
+    expect(whether.likeWeakMap(new WeakMap())).toBe(true);
+    expect(whether.likeWeakMap(new Map())).toBe(false);
   });
 
   it('isIterable', () => {
@@ -99,10 +99,10 @@ describe('UntypedWhether', () => {
     expect(whether.isPlainObject(new (class {})())).toBe(false);
   });
 
-  it('isRegExp', () => {
-    expect(whether.isRegExp(/abc/)).toBe(true);
-    expect(whether.isRegExp(new RegExp('abc'))).toBe(true);
-    expect(whether.isRegExp('abc')).toBe(false);
+  it('likeRegExp', () => {
+    expect(whether.likeRegExp(/abc/)).toBe(true);
+    expect(whether.likeRegExp(new RegExp('abc'))).toBe(true);
+    expect(whether.likeRegExp('abc')).toBe(false);
   });
 
   it('isObject', () => {

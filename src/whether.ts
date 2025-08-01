@@ -1,3 +1,5 @@
+import { getAllKeys } from './get-all-keys';
+
 const NOT_GIVEN = Symbol('NOT_GIVEN');
 
 export class UntypedWhether extends Function {
@@ -87,8 +89,15 @@ export class UntypedWhether extends Function {
     return Object.is(o, +0);
   }
 
-  private isSameProto(con: Class, o: object): boolean {
-    if (o instanceof con) {
+  /**
+   * Check if the constructor of the target has the similar properties as the given constructor
+   * - Will check all property keys in the proto chain, and compare their `typeof o[key]`
+   * @param protoClass
+   * @param o
+   * @returns
+   */
+  likeInstanceOf(protoClass: Class, o: any): boolean {
+    if (o instanceof protoClass) {
       return true;
     }
 
@@ -97,87 +106,85 @@ export class UntypedWhether extends Function {
     }
 
     let example;
-    if (con === Promise) {
-      example = new con(() => {});
+    if (protoClass === Promise) {
+      example = new protoClass(() => {});
     } else {
-      example = new con();
+      example = new protoClass();
     }
 
-    const proto = Reflect.getPrototypeOf(example) as object;
-    const targetProto = Reflect.getPrototypeOf(o);
-    if (!targetProto) {
-      return false;
-    }
-    const keys = Reflect.ownKeys(proto);
-    const targetKeys = Reflect.ownKeys(targetProto);
-    if (keys.length !== targetKeys.length) {
-      return false;
-    }
-    const set = new Set([...keys, ...targetKeys]);
-    if (set.size !== keys.length) {
+    const protoKeys = [...getAllKeys(example)];
+    const targetProtoKeys = getAllKeys(o);
+    if (protoKeys.length > targetProtoKeys.size) {
       return false;
     }
 
-    if (Object.prototype.toString.call(o) !== `[object ${con.name}]`) {
-      return false;
+    for (let i = 0; i < protoKeys.length; i++) {
+      const k = protoKeys[i];
+      if (!targetProtoKeys.has(k)) {
+        return false;
+      }
+      if (typeof Reflect.get(o, k) !== typeof example[k]) {
+        return false;
+      }
     }
+
     return true;
   }
 
   /**
-   * Tell whether the target is an Error instance
+   * Tell whether the target is like an Error instance
    * @param o target
    */
-  isError(o: any): o is Error {
-    return this.isSameProto(Error, o);
+  likeError(o: any): o is Error {
+    return this.likeInstanceOf(Error, o);
   }
 
   /**
-   * Tell whether the target is a Date instance
+   * Tell whether the target is like a Date instance
    * @param o target
    */
-  isDate(o: any): o is Date {
-    return this.isSameProto(Date, o);
+  likeDate(o: any): o is Date {
+    return this.likeInstanceOf(Date, o);
   }
 
   /**
-   * Tell whether the target is a Promise
+   * Tell whether the target is like a Promise
    * @param o target
    */
-  isPromise<T = any>(o: any): o is Promise<T> {
-    return this.isSameProto(Promise, o);
+  likePromise<T = any>(o: any): o is Promise<T> {
+    return this.likeInstanceOf(Promise, o);
   }
 
   /**
-   * Tell whether the target is a Set
+   * Tell whether the target is like a Set
    * @param o target
    */
-  isSet<T = any>(o: any): o is Set<T> {
-    return this.isSameProto(Set, o) && this.isIterable(o);
+  likeSet<T = any>(o: any): o is Set<T> {
+    return this.likeInstanceOf(Set, o) && this.isIterable(o);
   }
 
   /**
-   * Tell whether the target is a Map
+   * Tell whether the target is like a Map
    * @param o target
    */
-  isMap<K = any, V = any>(o: any): o is Map<K, V> {
-    return this.isSameProto(Map, o) && this.isIterable(o);
+  likeMap<K = any, V = any>(o: any): o is Map<K, V> {
+    return this.likeInstanceOf(Map, o) && this.isIterable(o);
   }
 
   /**
-   * Tell whether the target is a WeakSet
+   * Tell whether the target is like a WeakSet
    * @param o target
    */
-  isWeakSet<T extends WeakKey>(o: any): o is WeakSet<T> {
-    return this.isSameProto(WeakSet, o);
+  likeWeakSet<T extends WeakKey>(o: any): o is WeakSet<T> {
+    return this.likeInstanceOf(WeakSet, o);
   }
 
   /**
-   * Tell whether the target is a WeakMap
+   * Tell whether the target is like a WeakMap
    * @param o target
    */
-  isWeakMap<K extends WeakKey, V = any>(o: any): o is WeakMap<K, V> {
-    return this.isSameProto(WeakMap, o);
+  likeWeakMap<K extends WeakKey, V = any>(o: any): o is WeakMap<K, V> {
+    return this.likeInstanceOf(WeakMap, o);
   }
 
   /**
@@ -204,11 +211,11 @@ export class UntypedWhether extends Function {
   }
 
   /**
-   * Tell whether the target is a RegExp instance
+   * Tell whether the target is like a RegExp instance
    * @param o target
    */
-  isRegExp(o: any): o is RegExp {
-    return this.isSameProto(RegExp, o);
+  likeRegExp(o: any): o is RegExp {
+    return this.likeInstanceOf(RegExp, o);
   }
   // #endregion
 
