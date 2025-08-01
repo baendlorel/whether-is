@@ -5,7 +5,7 @@ export class UntypedWhether extends Function {
     super('o', `return !!o`);
   }
 
-  // #region Normal judge
+  // #region Conceptional judge
   /**
    * Same as `Object.is`
    */
@@ -30,6 +30,48 @@ export class UntypedWhether extends Function {
   }
 
   /**
+   * Returns `true` if the target is falsy or `{}`, `[]`
+   * @param o target
+   */
+  isEmpty(o: any): boolean {
+    if (!o) {
+      return true;
+    }
+
+    if (Array.isArray(o)) {
+      return o.length === 0;
+    }
+
+    if (typeof o === 'object') {
+      return Reflect.ownKeys(o).length === 0;
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if the target has no keys
+   * - return `null` if the target is not an object
+   */
+  isEmptyObject(o: any): boolean | null {
+    if (typeof o !== 'object') {
+      return null;
+    }
+    return Reflect.ownKeys(o).length === 0;
+  }
+
+  /**
+   * Check if the target is an empty array
+   * - return `null` if the target is not an object
+   */
+  isEmptyArray(o: any): boolean | null {
+    if (!Array.isArray(o)) {
+      return null;
+    }
+    return o.length === 0;
+  }
+
+  /**
    * Tell whether the target is negative zero
    * @param o target
    */
@@ -44,14 +86,9 @@ export class UntypedWhether extends Function {
   isPositiveZero(o: any): boolean {
     return Object.is(o, +0);
   }
+  // #endregion
 
-  /**
-   * Tell whether the target is a function
-   * @param o target
-   */
-  isFunction(o: any): o is Func {
-    return typeof o === 'function';
-  }
+  // #region Normal judge
 
   /**
    * Tell whether the target is a non-null object
@@ -67,6 +104,14 @@ export class UntypedWhether extends Function {
    */
   likeObject(o: unknown) {
     return (typeof o === 'object' && o !== null) || typeof o === 'function';
+  }
+
+  /**
+   * Tell whether the target is a function
+   * @param o target
+   */
+  isFunction(o: any): o is Func {
+    return typeof o === 'function';
   }
 
   /**
