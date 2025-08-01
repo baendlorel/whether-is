@@ -16,6 +16,18 @@ class UntypedWhether extends Function {
     return Object.is(a, b);
   }
 
+  isNegativeZero(o: any): boolean {
+    return Object.is(o, -0);
+  }
+
+  isPositiveZero(o: any): boolean {
+    return Object.is(o, +0);
+  }
+
+  isFunction(o: any): o is Func {
+    return typeof o === 'function';
+  }
+
   isObject<T extends object>(o: any): o is T {
     return typeof o === 'object' && o !== null;
   }
@@ -148,10 +160,6 @@ class UntypedWhether extends Function {
     } catch {
       return false;
     }
-  }
-
-  isFunction(o: any): o is Func {
-    return typeof o === 'function';
   }
 
   /**
