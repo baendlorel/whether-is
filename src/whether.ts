@@ -1,5 +1,22 @@
 import { deepEqual } from './deep-equal';
 import { getAllKeys } from './get-all-keys';
+import {
+  ObjectIs,
+  ObjectPrototype,
+  ReflectOwnKeys,
+  ReflectGet,
+  ReflectGetPrototypeOf,
+  ArrayIsArray,
+  NumberIsNaN,
+  NumberIsInteger,
+  NumberIsSafeInteger,
+  NumberIsFinite,
+  NumberMaxSafeInteger,
+  NumberMinSafeInteger,
+  FunctionPrototypeToString,
+  SymbolIterator,
+  BooleanConstructor,
+} from './global-methods';
 
 const NOT_GIVEN = Symbol('NOT_GIVEN');
 
@@ -13,7 +30,7 @@ export class UntypedWhether extends Function {
    * Same as `Object.is`
    */
   is(a: any, b: any): boolean {
-    return Object.is(a, b);
+    return ObjectIs(a, b);
   }
 
   /**
@@ -30,7 +47,7 @@ export class UntypedWhether extends Function {
    * @param o target
    */
   isTruthy(o: any): boolean {
-    return Boolean(o);
+    return BooleanConstructor(o);
   }
 
   /**
@@ -50,12 +67,12 @@ export class UntypedWhether extends Function {
       return true;
     }
 
-    if (Array.isArray(o)) {
+    if (ArrayIsArray(o)) {
       return o.length === 0;
     }
 
     if (typeof o === 'object') {
-      return Reflect.ownKeys(o).length === 0;
+      return ReflectOwnKeys(o).length === 0;
     }
 
     return false;
@@ -69,7 +86,7 @@ export class UntypedWhether extends Function {
     if (typeof o !== 'object') {
       return null;
     }
-    return Reflect.ownKeys(o).length === 0;
+    return ReflectOwnKeys(o).length === 0;
   }
 
   /**
@@ -77,7 +94,7 @@ export class UntypedWhether extends Function {
    * - return `null` if the target is not an object
    */
   isEmptyArray(o: any): boolean | null {
-    if (!Array.isArray(o)) {
+    if (!ArrayIsArray(o)) {
       return null;
     }
     return o.length === 0;
@@ -88,7 +105,7 @@ export class UntypedWhether extends Function {
    * @param o target
    */
   isNegativeZero(o: any): boolean {
-    return Object.is(o, -0);
+    return ObjectIs(o, -0);
   }
 
   /**
@@ -96,7 +113,7 @@ export class UntypedWhether extends Function {
    * @param o target
    */
   isPositiveZero(o: any): boolean {
-    return Object.is(o, +0);
+    return ObjectIs(o, +0);
   }
 
   /**
@@ -116,7 +133,7 @@ export class UntypedWhether extends Function {
     }
 
     let example;
-    if (Object.is(protoClass, Promise)) {
+    if (ObjectIs(protoClass, Promise)) {
       example = new protoClass(() => ({}));
     } else {
       example = new protoClass();
@@ -133,7 +150,7 @@ export class UntypedWhether extends Function {
       if (!targetProtoKeys.has(k)) {
         return false;
       }
-      if (typeof Reflect.get(o, k) !== typeof example[k]) {
+      if (typeof ReflectGet(o, k) !== typeof example[k]) {
         return false;
       }
     }
@@ -221,7 +238,7 @@ export class UntypedWhether extends Function {
     if (o === null || o === undefined) {
       return false;
     }
-    return typeof o[Symbol.iterator] === 'function';
+    return typeof o[SymbolIterator] === 'function';
   }
 
   /**
@@ -232,8 +249,8 @@ export class UntypedWhether extends Function {
     if (!this.isObject(o)) {
       return false;
     }
-    const proto = Reflect.getPrototypeOf(o);
-    return proto === Object.prototype || proto === null;
+    const proto = ReflectGetPrototypeOf(o);
+    return proto === ObjectPrototype || proto === null;
   }
 
   /**
@@ -390,8 +407,8 @@ export class UntypedWhether extends Function {
 
   /**
    * Tell whether the target is NaN
+   * - **if target is not a number, it will return `null`**
    * - if target is a number, it will return `true` if it is `NaN`
-   * - if target is not a number, it will return `null`
    * @param o target
    */
   isNaN(o: any): boolean | null {
@@ -399,7 +416,7 @@ export class UntypedWhether extends Function {
       return null;
     }
 
-    return Number.isNaN(o);
+    return NumberIsNaN(o);
   }
 
   /**
@@ -407,7 +424,7 @@ export class UntypedWhether extends Function {
    * @param o target
    */
   isInteger(o: any): boolean {
-    return Number.isInteger(o);
+    return NumberIsInteger(o);
   }
 
   /**
@@ -415,7 +432,7 @@ export class UntypedWhether extends Function {
    * @param o target
    */
   isSafeInteger(o: any): boolean {
-    return Number.isSafeInteger(o);
+    return NumberIsSafeInteger(o);
   }
 
   /**
@@ -423,11 +440,11 @@ export class UntypedWhether extends Function {
    * @param o target
    */
   isSafeNumber(o: any): boolean {
-    return typeof o === 'number' && o <= Number.MAX_SAFE_INTEGER && o >= Number.MIN_SAFE_INTEGER;
+    return typeof o === 'number' && o <= NumberMaxSafeInteger && o >= NumberMinSafeInteger;
   }
 
   isFinite(o: any): boolean {
-    return Number.isFinite(o);
+    return NumberIsFinite(o);
   }
 
   /**
@@ -445,7 +462,7 @@ export class UntypedWhether extends Function {
     try {
       const psudo = new Proxy(o, { construct: () => ({}) });
       new psudo();
-      const str = Function.prototype.toString.call(o) as string;
+      const str = FunctionPrototypeToString.call(o) as string;
       const trimmed = str.replace(/\s/g, '');
       return trimmed.startsWith('class') || trimmed.startsWith('[class');
     } catch {
@@ -467,11 +484,11 @@ export class UntypedWhether extends Function {
     o: any,
     predicate: (value?: T, index?: number, array?: T[]) => string | boolean = NOT_GIVEN as any
   ): o is T[] {
-    if (!Array.isArray(o)) {
+    if (!ArrayIsArray(o)) {
       return false;
     }
 
-    if (Object.is(predicate, NOT_GIVEN)) {
+    if (ObjectIs(predicate, NOT_GIVEN)) {
       return true;
     }
 

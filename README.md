@@ -28,6 +28,11 @@ whether.isArray([1, 2, 3]); // true
 whether.isNullish(undefined); // true
 whether.likeDate(new Date()); // true
 whether.likePromise(Promise.resolve()); // true
+
+// specially
+whether.isNaN(NaN); // true
+whether.isNaN(232); // false
+whether.isNaN('abc'); // null <- not false!
 ```
 
 ## API Highlights
@@ -40,6 +45,10 @@ whether.likePromise(Promise.resolve()); // true
 - All `orXXX` methods support optional/undefined values
 
 ### Notable Functions
+
+- `isNaN`:
+
+  - Returns `true` only for the real `NaN` value, `false` for numbers, and `null` for non-number types (e.g. `isNaN('abc') === null`). This avoids the pitfalls of the global `isNaN` and is more type-safe.
 
 - `likeXXX` series (e.g. `likeDate`, `likeSet`, `likePromise`):
   - These check if an object is structurally similar to a built-in type, not just by `instanceof`, but by comparing all prototype property types. Useful for cross-realm/iframe and polyfilled objects.
@@ -95,6 +104,11 @@ whether.isArray([1, 2, 3]); // true
 whether.isNullish(undefined); // true
 whether.likeDate(new Date()); // true
 whether.likePromise(Promise.resolve()); // true
+
+// 特别情况
+whether.isNaN(NaN); // true
+whether.isNaN(232); // false
+whether.isNaN('abc'); // null <- 不是 false!
 ```
 
 ## 主要 API
@@ -107,6 +121,10 @@ whether.likePromise(Promise.resolve()); // true
 - 所有 `orXXX` 方法支持可选/undefined 判定
 
 ### 特色判定函数
+
+- `isNaN`：
+
+  - 只对真正的 `NaN` 返回 `true`，对数字返回 `false`，对非数字类型（如字符串）返回 `null`，避免了全局 `isNaN` 的误判，更加类型安全。
 
 - `likeXXX` 系列（如 `likeDate`, `likeSet`, `likePromise`）：
   - 不仅仅用 `instanceof`，还会比较原型链上所有属性的 typeof，能识别跨 iframe、polyfill 等场景的“类实例”。
