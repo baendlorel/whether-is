@@ -1,5 +1,5 @@
-import { describe, expect, it } from '@jest/globals';
-import { UntypedWhether } from '../src/whether';
+import { describe, expect, it } from 'vitest';
+import { UntypedWhether } from '../src/whether.js';
 
 describe('UntypedWhether', () => {
   const whether = new UntypedWhether();

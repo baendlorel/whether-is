@@ -1,4 +1,4 @@
-import { ReflectOwnKeys, ReflectGetPrototypeOf } from './global-methods';
+import { ReflectOwnKeys, ReflectGetPrototypeOf } from './global-methods.js';
 
 export function getAllKeys(o: any) {
   let p = o;

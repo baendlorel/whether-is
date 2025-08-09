@@ -1,5 +1,5 @@
-import { deepEqual } from './deep-equal';
-import { getAllKeys } from './get-all-keys';
+import { deepEqual } from './deep-equal.js';
+import { getAllKeys } from './get-all-keys.js';
 import {
   ObjectIs,
   ObjectPrototype,
@@ -16,7 +16,7 @@ import {
   FunctionPrototypeToString,
   SymbolIterator,
   BooleanConstructor,
-} from './global-methods';
+} from './global-methods.js';
 
 const NOT_GIVEN = Symbol('NOT_GIVEN');
 

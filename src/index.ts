@@ -1,4 +1,4 @@
-import { UntypedWhether } from './whether';
+import { UntypedWhether } from './whether.js';
 
 type Whether = (<T = any>(o: unknown) => o is T) & UntypedWhether;
 

@@ -1,5 +1,5 @@
-import { getAllKeys } from './get-all-keys';
-import { ObjectIs, ArrayIsArray } from './global-methods';
+import { getAllKeys } from './get-all-keys.js';
+import { ObjectIs, ArrayIsArray } from './global-methods.js';
 
 type Like = <T extends Class>(protoClass: T, o: any) => o is InstanceType<T>;
 

@@ -1,4 +1,4 @@
-import pkg from './package.json' with { type: "json" };
+import { readFileSync } from 'fs';
 import path from 'path';
 import dts from 'rollup-plugin-dts';
 import typescript from '@rollup/plugin-typescript';
@@ -11,6 +11,8 @@ import replace from '@rollup/plugin-replace';
 
 const tsconfigFile = './tsconfig.build.json';
 
+const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
+
 /**
  * @type {import('rollup').RollupOptions}
  */
@@ -20,8 +22,8 @@ export default [
     input: 'src/index.ts',
     output: [
       {
-        file: 'dist/index.js',
-        format: 'cjs', // 指定为CommonJS格式
+        file: 'dist/index.mjs',
+        format: 'esm', // 指定为CommonJS格式
         sourcemap: false,
       },
     ],
