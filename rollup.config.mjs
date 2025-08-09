@@ -46,7 +46,7 @@ export default [
           [
             '@babel/plugin-proposal-decorators',
             {
-              version: '2021-12', // 使用新版装饰器，如需旧版使用 legacy: true
+              version: '2023-11', // 使用新版装饰器，如需旧版使用 legacy: true
             },
           ],
         ],
