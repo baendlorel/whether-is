@@ -4,6 +4,8 @@
 
 A comprehensive, extensible, and type-friendly type and value checking utility for JavaScript/TypeScript.
 
+For more awesome packages, check out [my homepage💛](https://baendlorel.github.io/?repoType=npm)
+
 ## Features
 
 - Rich type and value checking: supports primitives, objects, arrays, classes, special values, and more
@@ -47,7 +49,6 @@ whether.isNaN('abc'); // null <- not false!
 ### Notable Functions
 
 - `isNaN`:
-
   - Returns `true` only for the real `NaN` value, `false` for numbers, and `null` for non-number types (e.g. `isNaN('abc') === null`). This avoids the pitfalls of the global `isNaN` and is more type-safe.
 
 - `likeXXX` series (e.g. `likeDate`, `likeSet`, `likePromise`):
@@ -123,7 +124,6 @@ whether.isNaN('abc'); // null <- 不是 false!
 ### 特色判定函数
 
 - `isNaN`：
-
   - 只对真正的 `NaN` 返回 `true`，对数字返回 `false`，对非数字类型（如字符串）返回 `null`，避免了全局 `isNaN` 的误判，更加类型安全。
 
 - `likeXXX` 系列（如 `likeDate`, `likeSet`, `likePromise`）：
